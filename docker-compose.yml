@@ -1,0 +1,46 @@
+version: "3.1"
+
+services:
+  postgres:
+    image: postgres:16.1
+    ports:
+      - "${DATABASE_PORT}:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  caddy:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - DISCORD_CALLBACK_URL=${DISCORD_CALLBACK_URL}
+        - DISCORD_BOT_CLIENT_ID=${CLIENT_ID}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/caddy:/data
+    environment:
+      DOMAIN: ${DOMAIN}
+      ADMIN_USER: ${ADMIN_USER}
+      PASSWORD: ${PASSWORD}
+  verify:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: 3001
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      BASE_URL: ${BASE_URL}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
