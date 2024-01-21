@@ -1,0 +1,47 @@
+{
+  "name": "verifybot-be",
+  "version": "1.0.0",
+  "description": "Discord bot to verify Algorand projects on Discord",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/app/index.js",
+    "prod": "npx tsc && node dist/app/index.js",
+    "docker-start": "npm run migrate-prod && npm run start",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app/index.js\"",
+    "migrate-dev": "npx prisma migrate dev",
+    "migrate-prod": "npx prisma migrate deploy",
+    "generate": "npx prisma generate",
+    "prettier-watch": "onchange 'app/**/*.ts' -- prettier --write {{changed}}",
+    "format": "prettier --config .prettierrc 'app/**/*.ts' --write"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2",
+    "onchange": "^7.1.0",
+    "prettier": "^3.1.1",
+    "prisma": "^5.7.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@adminjs/express": "^6.1.0",
+    "@adminjs/prisma": "^5.0.1",
+    "@prisma/client": "^5.7.1",
+    "adminjs": "^7.5.2",
+    "algosdk": "^2.7.0",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "cron": "^3.1.6",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "morgan": "^1.10.0",
+    "uint8-to-base64": "^0.2.0"
+  }
+}

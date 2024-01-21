@@ -1,0 +1,215 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AlgoVerify API",
+    "description": "API documentation for AlgoVerify",
+    "contact": {
+      "name": "AlgoVerify",
+      "url": "https://algoverify.com"
+    },
+    "version": "1.1.0"
+  },
+  "paths": {
+    "/api/projects": {
+      "get": {
+        "summary": "Get a list of projects",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "CODEX",
+                    "creatorName": "CODEX",
+                    "featuredAsset": 31566704
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/project/{id}": {
+      "get": {
+        "summary": "Get details of a specific project",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "project": {
+                    "id": 1,
+                    "name": "CODEX",
+                    "creatorName": "CODEX",
+                    "guildId": "898131542486954014",
+                    "holderRoleId": "898131542486954014",
+                    "verifyChannel": "898131542486954014",
+                    "featuredAsset": 31566704,
+                    "inviteLink": "https://discord.gg/2YzJ2vz2",
+                    "specialAmount": 100,
+                    "specialRoleId": "898131542486954014",
+                    "status": true,
+                    "createdAt": "2024-01-16T12:34:56Z",
+                    "updatedAt": "2024-01-16T12:34:56Z",
+                    "projectAssets": [
+                      {
+                        "assetId": 459659857,
+                        "roleId": "1197761275615260772"
+                      }
+                    ],
+                    "creatorWallets": {
+                      "wallet": "CODEX2UFVBFZVX3BP4DYLDSUVTQUP7QKXV5KX5ZONYFU226IKAMJPDVXOA"
+                    }
+                  },
+                  "leaderboard": [
+                    {
+                      "user": {
+                        "userWallets": [
+                          {
+                            "wallet": "CODEX2UFVBFZVX3BP4DYLDSUVTQUP7QKXV5KX5ZONYFU226IKAMJPDVXOA"
+                          }
+                        ]
+                      },
+                      "count": 1
+                    }
+                  ],
+                  "uniqueHolders": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/userCount": {
+      "get": {
+        "summary": "Get the number of user currently verified",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": 100
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Get status of the API",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": "ok"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/discordId/{id}": {
+      "get": {
+        "summary": "Get wallet address by Discord ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "898131542486954014",
+                  "userWallets": [
+                    {
+                      "wallet": "CODEX2UFVBFZVX3BP4DYLDSUVTQUP7QKXV5KX5ZONYFU226IKAMJPDVXOA"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wallet/{wallet}": {
+      "get": {
+        "summary": "Get Discord ID by wallet address",
+        "parameters": [
+          {
+            "name": "wallet",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "898131542486954014"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "Get a list of users",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": "898131542486954014",
+                    "userWallets": [
+                      {
+                        "wallet": "CODEX2UFVBFZVX3BP4DYLDSUVTQUP7QKXV5KX5ZONYFU226IKAMJPDVXOA"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
