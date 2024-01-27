@@ -46,10 +46,9 @@ export async function getAssetsFromAddress(address: string, block: number): Prom
     let assets = userAssets.data.account.assets.filter((asset) => asset.amount > 0);
     return assets.map((asset) => asset["asset-id"]);
   } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log("Address:", address, error.response?.data);
-    } else {
+    if (!(error instanceof AxiosError)) {
       console.log("Address:", address, error);
+      //console.log("Address:", address, error.response?.data);
     }
     return [];
   }
@@ -237,11 +236,21 @@ export async function updateProjectHolders(projectId: number, block?: number, up
 
     // now check if user has special asset, if so add special role
     if (project.projectAssets.length > 0) {
+      const projectAssetGroups: Record<string, number[]> = {};
+
       for (const projectAsset of project.projectAssets) {
-        if (userAssets.includes(projectAsset.assetId)) {
-          await tryAddRole(member, projectAsset.roleId);
+        if (!projectAssetGroups[projectAsset.roleId]) {
+          projectAssetGroups[projectAsset.roleId] = [];
+        }
+        projectAssetGroups[projectAsset.roleId].push(projectAsset.assetId);
+      }
+
+      for (const roleId in projectAssetGroups) {
+        const intersection = userAssets.filter((asset) => projectAssetGroups[roleId].includes(asset));
+        if (intersection.length > 0) {
+          await tryAddRole(member, roleId);
         } else {
-          await tryRemoveRole(member, projectAsset.roleId);
+          await tryRemoveRole(member, roleId);
         }
       }
     }
@@ -525,11 +534,21 @@ export const updateSingleUser = async (userId: string) => {
         }
 
         if (project.projectAssets.length > 0) {
+          const projectAssetGroups: Record<string, number[]> = {};
+
           for (const projectAsset of project.projectAssets) {
-            if (userAssets.includes(projectAsset.assetId)) {
-              await tryAddRole(member, projectAsset.roleId);
+            if (!projectAssetGroups[projectAsset.roleId]) {
+              projectAssetGroups[projectAsset.roleId] = [];
+            }
+            projectAssetGroups[projectAsset.roleId].push(projectAsset.assetId);
+          }
+
+          for (const roleId in projectAssetGroups) {
+            const intersection = userAssets.filter((asset) => projectAssetGroups[roleId].includes(asset));
+            if (intersection.length > 0) {
+              await tryAddRole(member, roleId);
             } else {
-              await tryRemoveRole(member, projectAsset.roleId);
+              await tryRemoveRole(member, roleId);
             }
           }
         }
