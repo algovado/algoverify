@@ -6,7 +6,7 @@ import { DISCORD_TOKEN, PORT } from "./constants.js";
 import { client } from "./discord/client.js";
 import { errorHandler } from "./middlewares.js";
 import verifyRouter from "./routes/verify.js";
-
+import './polyfills.js';
 import AdminJSExpress from "@adminjs/express";
 import { Database, Resource, getModelByName } from "@adminjs/prisma";
 import AdminJS from "adminjs";

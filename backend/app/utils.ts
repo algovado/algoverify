@@ -35,7 +35,7 @@ export const sendTx = async (tx: string) => {
   return txId as string;
 };
 
-export async function getAssetsFromAddress(address: string, block: number): Promise<number[]> {
+export async function getAssetsFromAddress(address: string, block: number): Promise<bigint[]> {
   try {
     let userAssets = await axios.get<IndexerResponse>(
       `${ALGONODE_IDX_NODE_URL}/accounts/${address}?round=${block}&include-all=false&exclude=created-assets,apps-local-state,created-apps`
@@ -61,7 +61,7 @@ export async function getLastRound(): Promise<number> {
   return lastRound;
 }
 
-export async function isValidAsset(assetId: number): Promise<boolean> {
+export async function isValidAsset(assetId: bigint): Promise<boolean> {
   try {
     const url = ALGONODE_MAINNET_NODE_URL + "/v2/assets/" + assetId;
     const response = await axios.get(url);
@@ -72,7 +72,7 @@ export async function isValidAsset(assetId: number): Promise<boolean> {
   }
 }
 
-export async function getCreatedAssets(address: string[], blacklist: number[]): Promise<number[]> {
+export async function getCreatedAssets(address: string[], blacklist: bigint[]): Promise<bigint[]> {
   try {
     const assets = await Promise.all(
       address.map(async (address) => {
@@ -133,7 +133,7 @@ export async function updateProjectHolders(projectId: number, block?: number, up
   if (!project) {
     return false;
   }
-  const blacklist = project.blacklistedAssets.map((asset) => Number(asset.assetId));
+  const blacklist = project.blacklistedAssets.map((asset) => BigInt(asset.assetId));
   const assets = await getCreatedAssets(
     project.creatorWallets.map((obj) => obj.wallet),
     blacklist
@@ -215,7 +215,7 @@ export async function updateProjectHolders(projectId: number, block?: number, up
     }
     const userAssets = [...new Set(user.userWallets.map((wallet) => wallet.assets).flat())];
     // now get intersection of userAssets and assets
-    const intersection = userAssets.filter((asset) => assets.includes(Number(asset)));
+    const intersection = userAssets.filter((asset) => assets.includes(BigInt(asset)));
     // if user is holder, add role
     if (intersection.length > 0) {
       await tryAddRole(member, project.holderRoleId);
@@ -236,7 +236,7 @@ export async function updateProjectHolders(projectId: number, block?: number, up
 
     // now check if user has special asset, if so add special role
     if (project.projectAssets.length > 0) {
-      const projectAssetGroups: Record<string, number[]> = {};
+      const projectAssetGroups: Record<string, bigint[]> = {};
 
       for (const projectAsset of project.projectAssets) {
         if (!projectAssetGroups[projectAsset.roleId]) {
@@ -264,7 +264,7 @@ export async function updateProjectHolders(projectId: number, block?: number, up
       continue;
     }
     const userAssets = [...new Set(user.userWallets.map((wallet) => wallet.assets).flat())];
-    const intersection = userAssets.filter((asset) => assets.includes(Number(asset)));
+    const intersection = userAssets.filter((asset) => assets.includes(BigInt(asset)));
     // if user is holder, add role
     if (intersection.length > 0) {
       await tryAddRole(member, project.holderRoleId);
@@ -296,7 +296,7 @@ export const updateProjectsAssetCounts = async () => {
       userWallets: true,
     },
   });
-  const usersWithAssets: Record<string, number[]> = {};
+  const usersWithAssets: Record<string, bigint[]> = {};
   for (const user of users) {
     usersWithAssets[user.id] = [...new Set(user.userWallets.map((wallet) => wallet.assets).flat())];
   }
@@ -336,7 +336,7 @@ export const updateHolders = async () => {
 
 export const updateSingleProjectAssetCounts = async (
   project: FullProject,
-  usersWithAssets: Record<string, number[]> = {}
+  usersWithAssets: Record<string, bigint[]> = {}
 ) => {
   if (Object.keys(usersWithAssets).length === 0) {
     const users = await prisma.user.findMany({
@@ -351,7 +351,7 @@ export const updateSingleProjectAssetCounts = async (
 
   const assets = await getCreatedAssets(
     project.creatorWallets.map((obj) => obj.wallet),
-    project.blacklistedAssets.map((asset) => Number(asset.assetId))
+    project.blacklistedAssets.map((asset) => BigInt(asset.assetId))
   );
   // get intersection of assets and usersWithAssets
   const userList = Object.keys(usersWithAssets);
@@ -492,7 +492,7 @@ export const updateSingleUser = async (userId: string) => {
     try {
       const projectId = project.id;
       const specialRoleId = project.specialRoleId;
-      const blacklist = project.blacklistedAssets.map((asset) => Number(asset.assetId));
+      const blacklist = project.blacklistedAssets.map((asset) => BigInt(asset.assetId));
       const assets = await getCreatedAssets(
         project.creatorWallets.map((obj) => obj.wallet),
         blacklist
@@ -514,7 +514,7 @@ export const updateSingleUser = async (userId: string) => {
       try {
         const userAssets = [...new Set(userWithAssets.userWallets.map((wallet) => wallet.assets).flat())];
         // now get intersection of userAssets and assets
-        const intersection = userAssets.filter((asset) => assets.includes(Number(asset)));
+        const intersection = userAssets.filter((asset) => assets.includes(BigInt(asset)));
 
         if (intersection.length > 0) {
           await tryAddRole(member, project.holderRoleId);
@@ -534,7 +534,7 @@ export const updateSingleUser = async (userId: string) => {
         }
 
         if (project.projectAssets.length > 0) {
-          const projectAssetGroups: Record<string, number[]> = {};
+          const projectAssetGroups: Record<string, bigint[]> = {};
 
           for (const projectAsset of project.projectAssets) {
             if (!projectAssetGroups[projectAsset.roleId]) {
