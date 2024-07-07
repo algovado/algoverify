@@ -46,7 +46,7 @@ type AppsTotalSchema = {
 
 export type Asset = {
   amount: number;
-  "asset-id": number;
+  "asset-id": bigint;
   deleted: boolean;
   "is-frozen": boolean;
   "opted-in-at-round": number;
@@ -55,10 +55,10 @@ export type Asset = {
 
 export type AlgonodeResponse = {
   assets: {
-    "asset-id": number;
+    "asset-id": bigint;
     amount: number;
   }[];
-  "created-assets": { index: number }[];
+  "created-assets": { index: bigint }[];
 };
 
 export interface AssetParamsType {

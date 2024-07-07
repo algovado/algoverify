@@ -22,8 +22,8 @@ verifyRouter.post("/apply", async (req, res, next) => {
     let { tx, data, projectAssets, blacklistedAssets, creatorWallets } = req.body as {
       tx: string;
       data: Project;
-      projectAssets: { assetId: number; roleId: string }[];
-      blacklistedAssets: number[];
+      projectAssets: { assetId: bigint; roleId: string }[];
+      blacklistedAssets: bigint[];
       creatorWallets: string[];
     };
 
