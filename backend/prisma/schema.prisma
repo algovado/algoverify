@@ -25,7 +25,7 @@ model UserWallet {
   updatedAt DateTime @updatedAt
   userId    String
   wallet    String   @unique
-  assets    Int[]
+  assets    BigInt[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -45,7 +45,7 @@ model Project {
   guildId       String
   holderRoleId  String
   verifyChannel String
-  featuredAsset Int
+  featuredAsset BigInt
   inviteLink    String
   specialAmount Int?
   specialRoleId String?
@@ -78,7 +78,7 @@ model BlacklistedAsset {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   projectId Int
-  assetId   Int
+  assetId   BigInt
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
@@ -97,7 +97,7 @@ model Application {
 model ProjectAssets {
   id        Int      @id @default(autoincrement())
   projectId Int
-  assetId   Int
+  assetId   BigInt
   roleId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
