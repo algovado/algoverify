@@ -1,5 +1,5 @@
-export const ALGONODE_MAINNET_NODE = "https://mainnet-api.algonode.cloud";
-export const ALGONODE_IDX_NODE_URL = "https://mainnet-idx.algonode.cloud/v2";
+export const ALGONODE_MAINNET_NODE = "https://mainnet-api.4160.nodely.dev";
+export const ALGONODE_IDX_NODE_URL = "https://mainnet-idx.4160.nodely.dev/v2";
 export const IPFS_PREFIX = "https://ipfs.algonode.xyz/ipfs";
 export const BASE_FRONTEND_URL = window.location.origin;
 export const DISCORD_CALLBACK_URL = process.env.REACT_APP_DISCORD_CALLBACK_URL;
